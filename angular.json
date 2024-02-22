@@ -3,5 +3,36 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
+    "argano-custom-timer-lib": {
+      "projectType": "library",
+      "root": "projects/argano-custom-timer-lib",
+      "sourceRoot": "projects/argano-custom-timer-lib/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/argano-custom-timer-lib/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/argano-custom-timer-lib/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/argano-custom-timer-lib/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/argano-custom-timer-lib/src/test.ts",
+            "tsConfig": "projects/argano-custom-timer-lib/tsconfig.spec.json",
+            "karmaConfig": "projects/argano-custom-timer-lib/karma.conf.js"
+          }
+        }
+      }
+    }
   }
 }
