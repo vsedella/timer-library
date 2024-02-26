@@ -3,8 +3,5 @@
   "dest": "../../dist/argano-custom-timer-lib",
   "lib": {
     "entryFile": "src/public-api.ts"
-  },
-  "allowedNonPeerDependencies": [
-    "moment"
-  ]
+  }
 }

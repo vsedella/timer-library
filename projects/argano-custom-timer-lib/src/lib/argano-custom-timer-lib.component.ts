@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor, Validator, AbstractControl, ValidationErrors } from '@angular/forms';
-import * as moment from 'moment';
 
 @Component({
   selector: 'lib-argano-custom-timer-lib',
@@ -50,8 +49,13 @@ export class ArganoCustomTimerLibComponent implements OnInit, ControlValueAccess
   parseTheValue() {
     this.onTouch();
     const parsedValue = this.parseTime(this.time ? this.time : '');
+    // if (parsedValue) {
+    //   this.writeValue(parsedValue.format(this.timeFormat));
+    // }
     if (parsedValue) {
-      this.writeValue(parsedValue.format(this.timeFormat));
+      const formatedTime = new Intl.DateTimeFormat("en-US", {hour12: true, hour: "numeric",
+          minute: "numeric"}).format(parsedValue);
+      this.writeValue(formatedTime);
     }
   }
   validate(control: AbstractControl<any, any>): ValidationErrors | null {
@@ -72,12 +76,11 @@ export class ArganoCustomTimerLibComponent implements OnInit, ControlValueAccess
 
   ngOnInit(): void {}
 
-  parseTime(time: String): moment.Moment | null {
+  parseTime(time: String): Date | null {
     let amPm = 'a';
     let hours: number;
     let minutes: number;
     if (time) {
-      console.log(moment());
       let timeTemp = time.toLowerCase();
       timeTemp = timeTemp.replace(/:|\s/g, '');
 
@@ -114,11 +117,20 @@ export class ArganoCustomTimerLibComponent implements OnInit, ControlValueAccess
         console.log('inside catch', error);
         return null;
       }
-      const momentTime = moment({ hours: hours, minutes: minutes });
-      // console.log('input:', time, 'hours:', hours, 'minutes:', minutes, 'momentTime:', momentTime.format('hh:mm A'));
-      if (momentTime.isValid()) {
-        return momentTime;
+      const momentTime = `${hours}:${minutes}`.match(/([01]*[0-9]|2[0-3]):([0-5][0-9])/g);
+      if (momentTime){
+        const currentDate = new Date();
+        currentDate.setHours(hours);
+        currentDate.setMinutes(minutes);
+        return currentDate;
+      }else{
+        return null;
       }
+      // const momentTime = moment({ hours: hours, minutes: minutes });
+      // // console.log('input:', time, 'hours:', hours, 'minutes:', minutes, 'momentTime:', momentTime.format('hh:mm A'));
+      // if (momentTime.isValid()) {
+      //   return momentTime;
+      // }
     }
     return null;
   }
